@@ -9,6 +9,7 @@ services:
       HOST: 0.0.0.0
       DATA_DIR: /data
       STATIC_DIR: /app/public
+      LEMMING_RESCUE_PASSWORD: "${LEMMING_RESCUE_PASSWORD:?Stel LEMMING_RESCUE_PASSWORD in via .env (minimaal 12 tekens)}"
     ports:
       - "${LEMMING_RESCUE_BIND:-127.0.0.1}:${LEMMING_RESCUE_PORT:-8080}:8080"
     volumes:
