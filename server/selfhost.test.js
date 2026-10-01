@@ -31,7 +31,9 @@ test('Authentication, migration, user isolation, logout and session revocation',
     const request=(route,init={})=>fetch(base+route,{redirect:'manual',...init});
     const login=async(name,password)=>{const r=await request('/api/auth/login',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({username:name,password})});assert.equal(r.status,200);assert.match(r.headers.get('set-cookie'),/HttpOnly; SameSite=Strict/);return r.headers.get('set-cookie').split(';')[0];};
     assert.equal((await request('/api/progress')).status,401);
-    assert.match(await (await request('/')).text(),/name="username"/);
+    const loginPage=await request('/');assert.match(loginPage.headers.get('content-security-policy'),/img-src data:/);
+    const loginHtml=await loginPage.text();assert.match(loginHtml,/name="username"/);assert.match(loginHtml,/<canvas id="lemmingScene">/);assert.match(loginHtml,/data:image\/png;base64,[A-Za-z0-9+/]+=*/);
+    const sceneScript=loginHtml.match(/<script>([\s\S]*?)<\/script>/)?.[1];assert.ok(sceneScript);assert.doesNotThrow(()=>new Function(sceneScript));
     const owner=await login('WTRDK','first-owner-password'),alice=await login('alice','second-user-password');
     const get=cookie=>request('/api/progress',{headers:{cookie}}).then(r=>r.json());
     assert.equal((await get(owner)).progress[0].percent,50);assert.deepEqual((await get(alice)).progress,[]);

@@ -1,2 +1,49 @@
 :root{color-scheme:dark;--green:#80f080;--navy:#000033;--panel:#393952;--edge:#9494b0;--text:#f4f4ed;font-family:'Courier New',ui-monospace,monospace}*{box-sizing:border-box}body{margin:0;padding:20px 12px;background:#111120;color:var(--text)}button,input,select{font:inherit}button,select,.file-button{min-height:44px;border:2px solid;border-color:#9999af #252536 #252536 #9999af;border-radius:0;background:#4a4a63;color:#fff;padding:8px 12px;cursor:pointer;font-size:14px;font-weight:bold;touch-action:manipulation}button:hover,select:hover,.file-button:hover{background:#5c5c78}button:active{border-color:#252536 #9999af #9999af #252536}button:focus-visible,select:focus-visible,input:focus-visible,canvas:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid #ffff77;outline-offset:2px}button:disabled{opacity:.4;cursor:default}button[aria-pressed=true]{background:#1d502d;color:#b0ffb0;border-color:#80d880 #163020 #163020 #80d880}label{display:flex;align-items:center;gap:8px;font-size:14px}input[type=checkbox]{width:20px;height:20px;accent-color:#80d880}input[type=range]{accent-color:#80d880;min-width:100px}a{color:#b0ffb0}.game-shell{max-width:960px;margin:auto;border:3px solid #7b7b96;box-shadow:0 12px 40px #0008;background:var(--panel)}.levelbar{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:10px 12px;background:#26263d;border-bottom:2px solid #7b7b96}.wordmark{font-size:18px;color:var(--green);font-weight:bold}.levelbar label{flex:1;min-width:220px}.levelbar select{width:100%;max-width:410px}.best{font-size:14px;color:#dddde8}.stage{position:relative;background:var(--navy);aspect-ratio:2;overflow:hidden}.stage canvas{display:block;width:100%;height:100%;image-rendering:pixelated;cursor:crosshair;touch-action:none}.overlay{position:absolute;inset:0;display:grid;place-items:center;background:#000033bd;padding:14px;z-index:3}.overlay[hidden],[hidden]{display:none!important}.card{width:min(530px,95%);max-height:100%;overflow:auto;background:#292943;border:3px solid;border-color:#a8a8c0 #111127 #111127 #a8a8c0;padding:20px;text-align:center}.card h1,.card h2{font-size:24px;line-height:1.15;color:var(--green);margin:4px 0 12px}.card p{font-size:16px;line-height:1.35;margin:10px 0}.card .eyebrow{font-size:14px;letter-spacing:3px;color:#c0c0d8}.hint{color:#d0d0e0}.primary{background:#245d34;border-color:#90dc90 #12321c #12321c #90dc90;color:#c8ffc8}.primary:hover{background:#327648}.actions{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}.pause-badge{position:absolute;top:12px;right:12px;padding:5px 9px;background:#000033e0;color:#ffff80;border:1px solid #ffff80;pointer-events:none;font-size:14px}.classic-panel{background:#515169;border-top:3px solid #9a9ab0;padding:6px 8px}.statusbar{display:flex;align-items:center;gap:14px;color:var(--green);font-size:14px;font-weight:bold;line-height:1.5;margin-bottom:5px}.statusbar #cursorReadout{margin-right:auto;min-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.statusbar strong{color:#b0ffb0}.panel-bottom{display:flex;gap:8px}.skills{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));flex:1;gap:3px}.skills button{padding:3px 2px 5px;min-width:0;background:#353551;font-size:14px;position:relative}.skill-picture{width:32px;height:30px;display:block;image-rendering:pixelated;margin:auto}.skill-count{display:block;color:#fff;font-size:18px;line-height:22px;font-weight:bold}.skill-name{display:block;color:#c0ffc0;font-size:14px;letter-spacing:-.5px}.skills button[aria-pressed=true]{border:2px solid #ffff80;background:#494967}.skill-key{position:absolute;left:3px;top:3px;font-size:12px;color:#b9b9cd}.navigation-panel{width:188px;flex:none;display:flex;flex-direction:column;justify-content:space-between}.rate{display:flex;justify-content:space-between;align-items:center;color:#b0ffb0;font-weight:bold;font-size:16px}.rate button{padding:2px 12px;min-width:44px}.navigation-panel canvas{width:100%;height:34px;image-rendering:pixelated;border:2px inset #b0b0bb;background:#000033;cursor:pointer;touch-action:none}.controls{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px;border-top:2px solid #202035}.controls label{margin-left:4px}.practice-panel{display:flex;flex-wrap:wrap;align-items:center;gap:8px;background:#252d3b;padding:10px}.practice-panel label{flex:1}.practice-panel input{width:100%}.note{font-size:14px;color:#c1c1d8;line-height:1.4}.practice-panel .note{width:100%}.messagebar{display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e2e2ef;font-size:14px;min-height:43px;border-top:1px solid #77778b}details{border-top:1px solid #77778b;padding:0 12px 12px;font-size:14px}summary{cursor:pointer;padding:12px 0;color:#b0ffb0;min-height:44px}.options-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.options-grid h2{font-size:16px;color:#b0ffb0;margin:0 0 10px}.options-grid button{margin:0 4px 8px 0}.options-grid label{margin-top:5px}.file-button{display:inline-flex;position:relative;overflow:hidden}.file-button input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%}.instructions{line-height:1.7;font-size:14px;color:#d5d5e4}kbd{color:#b0ffb0;font:inherit;font-weight:bold}footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;background:#26263d;padding:12px;font-size:12px;line-height:1.4}footer a{font-size:14px}#saveState{font-size:14px;color:#c1c1d8}.error{color:#ffaaaa!important}
 @media(max-width:700px){body{padding:0}.game-shell{border:0;min-height:100dvh}.wordmark{font-size:16px}.levelbar{gap:8px;padding:8px}.levelbar label{min-width:180px}.levelbar .best{width:100%;font-size:14px}.card{padding:10px}.card h1,.card h2{font-size:20px;margin:0 0 6px}.card p{font-size:14px;margin:5px 0}.card .hint{display:none}.card .eyebrow{font-size:12px;margin:0 0 4px}.card button{min-height:40px}.statusbar{gap:8px;flex-wrap:wrap;font-size:14px}.statusbar #cursorReadout{width:100%;min-height:21px}.panel-bottom{flex-wrap:wrap}.skills{grid-template-columns:repeat(4,1fr);width:100%;flex-basis:100%;gap:4px}.skills button{min-height:76px}.navigation-panel{width:100%;flex-direction:row;gap:12px;align-items:center}.navigation-panel .rate{width:145px;flex:none}.navigation-panel canvas{flex:1;min-width:0;width:100px;height:30px}.controls{gap:5px}.controls button{flex:1;white-space:nowrap;padding:6px 9px}.controls .practice-toggle{flex:1}.options-grid{grid-template-columns:1fr}.overlay{padding:6px}footer{font-size:12px}.stage{min-height:160px}.practice-panel .note{font-size:14px}.messagebar{line-height:1.5}}
+
+/* Touch layouts preserve the 2:1 pixel canvas and keep controls easy to tap. */
+.stage{aspect-ratio:2;min-height:0}
+.skills button,.controls button,.navigation-panel button,.practice-panel button,.actions button{touch-action:manipulation}
+@media(pointer:coarse) and (max-width:900px){
+  body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+  .game-shell{width:100%;max-width:none}
+  .skills{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .skills button{min-height:64px;padding:4px 2px}
+  .skill-picture{width:28px;height:24px}
+  .skill-count{font-size:17px;line-height:19px}
+  .skill-name{font-size:12px;line-height:14px;letter-spacing:-.4px}
+  .skill-key{font-size:11px}
+  .navigation-panel button{min-width:48px}
+  .controls button,.practice-panel button{min-height:48px}
+  .levelbar select,.controls select{min-height:48px}
+  .statusbar{row-gap:3px}
+}
+@media(pointer:coarse) and (min-width:800px) and (orientation:landscape){
+  .game-shell{display:grid;grid-template-columns:minmax(0,2.1fr) minmax(270px,.95fr);gap:0;max-width:1440px;align-items:start}
+  .levelbar,.messagebar,details,footer{grid-column:1/-1}
+  .stage{grid-column:1;grid-row:2;align-self:start}
+  .classic-panel{grid-column:2;grid-row:2;padding:8px;border-top:0;border-left:3px solid #9a9ab0;min-width:0}
+  .statusbar{flex-wrap:wrap;gap:5px 10px;margin-bottom:8px}
+  .statusbar #cursorReadout{width:100%;margin:0;min-width:0}
+  .panel-bottom{display:flex;flex-direction:column;gap:8px}
+  .skills{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+  .skills button{min-height:66px}
+  .navigation-panel{width:100%;gap:8px}
+  .navigation-panel canvas{height:34px}
+  .controls{grid-column:2;grid-row:3;display:grid;grid-template-columns:1fr 1fr;align-items:stretch}
+  .controls label{margin:0}
+  .controls label:last-child{grid-column:1/-1}
+  .practice-panel{grid-column:2;grid-row:4}
+  .messagebar{grid-row:5}
+  details{grid-row:6}
+  footer{grid-row:7}
+}
+@media(max-width:380px){
+  .levelbar label{min-width:145px}
+  .levelbar .best{font-size:12px}
+  .statusbar{font-size:12px}
+  .controls{padding:6px;gap:4px}
+  .controls button{padding:5px 4px;font-size:12px}
+  .controls label{font-size:12px}
+  .skills button{min-height:60px}
+}
