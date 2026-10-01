@@ -1,0 +1,35 @@
+[
+  {
+    "name": "jump-right",
+    "x": 0,
+    "y": 0,
+    "w": 16,
+    "h": 10,
+    "offsetX": -8,
+    "offsetY": -10,
+    "source": "Amiga SPS0132 Code",
+    "offset": 52518
+  },
+  {
+    "name": "jump-left",
+    "x": 16,
+    "y": 0,
+    "w": 16,
+    "h": 10,
+    "offsetX": -8,
+    "offsetY": -10,
+    "source": "Amiga SPS0132 Code",
+    "offset": 53058
+  },
+  {
+    "name": "explosion",
+    "x": 0,
+    "y": 10,
+    "w": 32,
+    "h": 32,
+    "offsetX": -8,
+    "offsetY": -10,
+    "source": "Amiga SPS0132 Code",
+    "offset": 57694
+  }
+]

@@ -1,0 +1,74 @@
+{
+  "music": {
+    "source": "https://www.lemmingsforums.net/index.php?topic=6376.0",
+    "recorder": "jkapp76 (Jeremy Kapp)",
+    "provenance": "Original Amiga game playback captured through emulation; stereo reupload July 30 2023. Reencoded to Vorbis quality 3, preserving duration and stereo. Not a MIDI cover. Source capture packet timestamps were rebuilt from decoded sample count before Vorbis encoding; all reencoded tracks decode without timestamp warnings.",
+    "tracks": [
+      "orig_01_cancan_amiga.ogg",
+      "orig_02_lemming1_amiga.ogg",
+      "orig_03_tim2_amiga.ogg",
+      "orig_04_lemming2_amiga.ogg",
+      "orig_05_tim8_amiga.ogg"
+    ],
+    "levelMap": [
+      {
+        "rank": "Fun",
+        "level": 1,
+        "musicIndex": 0
+      },
+      {
+        "rank": "Fun",
+        "level": 2,
+        "musicIndex": 1
+      },
+      {
+        "rank": "Fun",
+        "level": 3,
+        "musicIndex": 2
+      },
+      {
+        "rank": "Fun",
+        "level": 4,
+        "musicIndex": 3
+      },
+      {
+        "rank": "Fun",
+        "level": 5,
+        "musicIndex": 4
+      }
+    ],
+    "levelMapSource": "https://www.lemmingsforums.net/index.php?topic=4856.0 / attachment 14183, Amiga levelpack.ini"
+  },
+  "sfx": {
+    "source": "https://www.lemmingsforums.net/index.php?topic=6512.0",
+    "recorder": "The Tomato Watcher",
+    "provenance": "AmigaLemmings folder from LemmingsVersionsNLSounds.zip, updated January19 2024. WAV recordings converted without altering playback speed to 16-bit PCM 22050Hz mono.",
+    "files": [
+      "chain.wav",
+      "changeop.wav",
+      "chink.wav",
+      "die.wav",
+      "door.wav",
+      "electric.wav",
+      "explode.wav",
+      "fire.wav",
+      "glug.wav",
+      "letsgo.wav",
+      "mousepre.wav",
+      "ohno.wav",
+      "slurp.wav",
+      "splash.wav",
+      "splat.wav",
+      "tenton.wav",
+      "thud.wav",
+      "thunk.wav",
+      "ting.wav",
+      "yippee.wav"
+    ]
+  },
+  "caveats": [
+    "Music playback is an emulator capture, not validated against real Amiga hardware by this task.",
+    "Sample associations verified against the separate firsthand WinUAE rip post at https://www.lemmingsforums.net/index.php?topic=5271.0 . Some less common effects not semantically verified.",
+    "Original Amiga Music/FX toggles music with limited effects versus no music and full effects. A modern simultaneous full mix differs."
+  ]
+}

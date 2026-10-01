@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Lemming Rescue</title><meta name="description" content="Speel de 120 originele Amiga-singleplayerlevels met klassieke skills, oorspronkelijke terreinsets en Amiga-lemmingensprites.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000033'/%3E%3Cpath fill='%2300bb00' d='M7 5h18v6H13v5H7z'/%3E%3Cpath fill='%23ffdddd' d='M13 11h10v9H13z'/%3E%3Cpath fill='%234444ee' d='M11 20h12v9H11z'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/classic.css">
+</head>
+<body>
+<main class="game-shell" id="gameShell">
+  <header class="levelbar">
+    <span class="wordmark">Lemming Rescue</span>
+    <label>Level <select id="levelChoice" aria-label="Level kiezen" disabled><option>Levels laden…</option></select></label>
+    <span id="bestResult" class="best">Voortgang laden…</span>
+  </header>
+  <div class="stage" id="stage">
+    <canvas id="gameCanvas" width="320" height="160" aria-label="Speelveld. Selecteer een skill en klik op een lemming. Sleep om het level te verschuiven; gebruik twee vingers om te zoomen." tabindex="0"></canvas>
+    <section id="introOverlay" class="overlay" aria-labelledby="levelTitle">
+      <div class="card"><p class="eyebrow" id="levelEyebrow">FUN 01</p><h1 id="levelTitle">Levels laden…</h1>
+      <p id="levelGoal"></p><p id="levelHint" class="hint"></p><button id="startKnop" class="primary" disabled>Start level</button></div>
+    </section>
+    <section id="eindOverlay" class="overlay" hidden aria-labelledby="endTitle">
+      <div class="card"><h2 id="endTitle"></h2><p id="endText"></p><p id="saveState" role="status"></p>
+      <div class="actions"><button id="nextLevel" class="primary">Volgend level</button><button id="retryLevel">Nogmaals</button><button id="endReplay">Replay bekijken</button><button id="retrySave" hidden>Opnieuw opslaan</button></div></div>
+    </section>
+    <span id="pauseBadge" class="pause-badge" hidden>PAUZE</span>
+  </div>
+  <div class="classic-panel">
+    <div class="statusbar" aria-label="Levelstatus">
+      <span id="cursorReadout">Kies een lemming</span><span>OUT <strong id="statOut">0</strong></span><span>SAVE <strong id="statSaved">0%</strong></span><span>NEED <strong id="statNeed">10%</strong></span><span>TIME <strong id="statTime">05:00</strong></span>
+    </div>
+    <div class="panel-bottom">
+      <div class="skills" id="skills" role="group" aria-label="Klassieke skills"></div>
+      <div class="navigation-panel">
+        <div class="rate"><button id="tempoMinKnop" aria-label="Verlaag instroom">−</button><span>RR <strong id="releaseRate">50</strong></span><button id="tempoPlusKnop" aria-label="Verhoog instroom">+</button></div>
+        <canvas id="minimap" width="160" height="16" aria-label="Minimap. Klik of sleep om door het level te navigeren." tabindex="0"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="controls" role="group" aria-label="Spelbediening">
+    <button id="pauzeKnop" aria-pressed="false">Pauze</button><button id="snelKnop" aria-pressed="false">2× snelheid</button><button id="herstartKnop">Herstart</button><button id="nukeKnop">Nuke ×2</button>
+    <label class="practice-toggle"><input type="checkbox" id="practice"> Oefenstand</label>
+    <label>Zoom <select id="zoom" aria-label="Zoom"><option value="1">1×</option><option value="2">2×</option><option value="3">3×</option></select></label>
+  </div>
+  <div class="practice-panel" id="practicePanel" hidden>
+    <button id="rewind">5 sec terug</button><button id="step">Eén stap</button><label>Tijdlijn <input id="timeline" type="range" min="0" max="0" value="0" aria-label="Oefentijdlijn"></label><span id="practiceTime">00:00</span>
+    <span class="note">Oefenresultaten tellen niet mee voor je beste resultaat.</span>
+  </div>
+  <div class="messagebar"><span id="melding" role="status">Selecteer een level.</span><button id="retryProgress" hidden>Voortgang opnieuw laden</button></div>
+  <details id="options"><summary>Geluid, replays &amp; bediening</summary>
+    <div class="options-grid">
+      <section><h2>Geluid</h2><button id="effects" aria-pressed="true">Effecten aan</button><button id="music" aria-pressed="false">Muziek uit</button><label>Volume <input id="volume" type="range" min="0" max="100" value="45" aria-label="Volume"></label></section>
+      <section><h2>Replay</h2><button id="watchReplay" disabled>Beste replay bekijken</button><button id="exportReplay" disabled>Replay downloaden</button><label class="file-button">Replay laden<input id="importReplay" type="file" accept="application/json,.json"></label><p id="replayStatus" class="note">Je handelingen worden tijdens het spelen opgenomen.</p></section>
+    </div>
+    <p class="instructions"><kbd>1</kbd>–<kbd>8</kbd> skill · <kbd>Tab</kbd> volgende lemming · <kbd>Enter</kbd> toepassen · <kbd>Spatie</kbd> pauze · <kbd>−</kbd>/<kbd>+</kbd> instroom · pijltjes verschuiven · <kbd>R</kbd> herstart · <kbd>N</kbd> Nuke, tweemaal. Houd <kbd>Shift</kbd> vast om alleen walkers te kiezen. In oefenstand kun je tijdens pauze skills geven.</p>
+    <p class="instructions">Op een touchscreen: tik een lemming, sleep het beeld of zoom met twee vingers. Climber en Floater blijven actief. Builder legt twaalf stenen; geef opnieuw Builder om door te bouwen. Staal is onverwoestbaar; pijlen bepalen de toegestane graafrichting.</p>
+  </details>
+  <footer><a href="/rescue.html">Eigen Rescue-puzzel</a><a href="/versus.html">Amiga-tweespelerslevels</a><span>Amiga · 120 singleplayerlevels · DMA Design / Psygnosis · Sprite-rip: Megasis</span></footer>
+</main>
+<script type="module" src="/classic.js"></script>
+</body></html>

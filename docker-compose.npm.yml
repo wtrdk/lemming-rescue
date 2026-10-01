@@ -1,0 +1,11 @@
+services:
+  lemming-rescue:
+    networks:
+      npm_default:
+        aliases:
+          - lemming-rescue
+
+networks:
+  npm_default:
+    external: true
+    name: npm_default

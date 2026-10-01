@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Lemming Rescue · Tweespeler</title><meta name="description" content="Speel de originele Amiga-tweespelerslevels lokaal tegen elkaar."><link rel="stylesheet" href="/versus.css"></head>
+<body><main class="arena">
+  <header><a href="/">← Campagne</a><h1>Amiga · Tweespeler</h1><label>Level <select id="level"></select></label></header>
+  <section class="score"><div id="score0"><b>Speler 1</b><strong>0</strong><small>vaardigheden</small></div><div id="score1"><b>Speler 2</b><strong>0</strong><small>vaardigheden</small></div></section>
+  <div class="stage"><canvas id="field" width="320" height="160" aria-label="Tweespelerspeelveld"></canvas><div id="intro" class="veil"><div><p>AMIGA · 2 SPELERS</p><h2 id="title"></h2><span id="objective"></span><button id="start">Level starten</button></div></div></div>
+  <nav><button id="pause">Start</button><button id="restart">Opnieuw</button><button id="zoom">Zoom 1×</button><span id="state">Selecteer een speler en vaardigheid.</span></nav>
+  <div class="turns"><button data-team="0" class="active">Speler 1 · Groen</button><button data-team="1">Speler 2 · Blauw</button></div>
+  <section id="skills" class="skills" aria-label="Vaardigheden"></section>
+  <p class="help">Selecteer speler 1 of 2, kies een vaardigheid en klik daarna op een eigen lemming. Beide teams spelen tegelijk; de lemmings redden die een uitgang bereiken tellen voor de speler aan die kant.</p>
+</main><script type="module" src="/versus.js"></script></body></html>
