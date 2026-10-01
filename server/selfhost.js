@@ -25,7 +25,10 @@ const dummyHash=await hashPassword(randomBytes(32).toString('hex'));
 const sessions=new Map(),attempts=new Map();
 const sessionLifetime=12*60*60*1000,attemptWindow=15*60*1000;
 setInterval(()=>{const now=Date.now();for(const [key,s] of sessions)if(s.expires<=now)sessions.delete(key);for(const [key,a] of attempts)if(a.until<=now)attempts.delete(key);},60000).unref();
-const loginPage=createLoginPage((await readFile(path.join(root,'assets/sprites/lemmings-amiga.png'))).toString('base64'));
+const loginPage=createLoginPage(
+  (await readFile(path.join(root,'assets/sprites/lemmings-amiga.png'))).toString('base64'),
+  (await readFile(path.join(root,'assets/login-level.png'))).toString('base64')
+);
 // Migrate the shared score table once; existing records belong to the first account.
 const columns=sqlite.prepare("PRAGMA table_info(progress)").all();
 if(columns.length&&!columns.some(c=>c.name==='user_id')){
