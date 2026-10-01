@@ -8,3 +8,7 @@ node_modules
 .env.*
 !.env.example
 npm-debug.log
+
+backups
+
+data-backup-*

@@ -8,6 +8,25 @@ Kies een level uit een van de vier moeilijkheidsgroepen en start. Selecteer daar
 
 Spatie pauzeert wanneer het speelveld focus heeft; in pauze kun je skills blijven toewijzen. Met `−` en `+` verander je de instroomsnelheid. Bevestig Nuke door tweemaal te klikken of tweemaal N te drukken. De oefenstand biedt vijf seconden terugspoelen, één simulatiestap en een tijdlijn; oefenpogingen tellen niet mee in het opgeslagen record.
 
+## Zelf hosten en aanmelden
+
+De Docker-versie gebruikt persoonlijke accounts. De eerste gebruiker is standaard `wtrdk` en wordt beheerder. Iedere speler heeft eigen scores en replays; er is geen openbare registratie. De game, accountpagina's en voortgangs-API zijn pas na aanmelden bereikbaar. De healthcheck `/api/health` is anoniem beschikbaar en bevat alleen de serverstatus.
+
+De navigatie biedt:
+
+| Pagina | Functie | Toegang |
+| --- | --- | --- |
+| `/` | De 120 Amiga-singleplayerlevels | Alle aangemelde gebruikers |
+| `/versus.html` | 20 levels voor twee lokale spelers | Alle aangemelde gebruikers |
+| `/rescue.html` | De eigen Rescue-puzzel | Alle aangemelde gebruikers |
+| `/scoreboard` | Privé challenges per singleplayerlevel | Alle aangemelde gebruikers |
+| `/account` | Zelf je wachtwoord wijzigen | Eigen account |
+| `/admin` | Gebruikers, rollen en back-ups beheren | Beheerders |
+
+Dagelijkse gecontroleerde back-ups worden standaard om 03:00 Nederlandse tijd gemaakt en 14 dagen bewaard. Het scorebord bewaart drie onafhankelijke records per speler en level: meeste lemmings gered, minste skills en snelste oplossing. Alleen gehaalde levels tellen mee.
+
+Begin met [DOCKER.md](DOCKER.md). Voor accountbeheer zie [MULTIUSER.md](MULTIUSER.md), voor back-ups en challenges [FEATURES.md](FEATURES.md) en voor repositorybeheer [GITHUB.md](GITHUB.md).
+
 ## Wat erin zit
 
 - 120 Amiga-singleplayerlevels (Fun 1–30, Tricky 1–30, Taxing 1–30 en Mayhem 1–30), inclusief de originele levelherhalingen met afzonderlijke moeilijkheid, metadata en voortgang.
@@ -17,7 +36,7 @@ Spatie pauzeert wanneer het speelveld focus heeft; in pauze kun je skills blijve
 - Een vaste Amiga-PAL-simulatiecadans van 50/3 stappen per seconde, integer-pixelbeweging, gevormde terreinbotsingen, framegestuurde skills, traps, staal en eenrichtings-terrein.
 - De eerste vijf originele Amiga-muziektracks en twintig Amiga-effecten. Muziek, effecten en volume zijn instelbaar.
 - Klassieke status-HUD, instroomregeling, klikbare minimap, scrollen, zoom, toetsenbord- en aanraakbediening.
-- Voortgang en beste score op de privésite, plus importeren, downloaden en afspelen van deterministische replays. De sitegateway beschermt de voortgangs-API; de records staan in D1.
+- Voortgang en beste score op de privé gehoste Site, plus importeren, downloaden en afspelen van deterministische replays. De Site-gateway beschermt de voortgangs-API; records staan in D1. De Docker-versie vraagt eerst om een persoonlijke gebruikersnaam en wachtwoord en beschermt daarmee ook de gamebestanden en voortgangs-API.
 - De oude Rescue-puzzel en zijn bestaande bediening blijven beschikbaar via `rescue.html`.
 
 ## Getrouwheid en grenzen
@@ -26,7 +45,17 @@ De 120 singleplayerlevelrecords zijn gereconstrueerd met de originele Amiga-leve
 
 ## Ontwikkelen en testen
 
-`npm install`, `npm run dev` en `npm run build` starten en bouwen de game. De lokale `/qa.html`-route voert de echte engine en browserassets door mechaniektests; deze route wordt niet in het websitepakket gebouwd. Voortgang gebruikt voor de lokale Vite-preview een SQLite-testdatabase. De gehoste site gebruikt het door Sites beheerde D1.
+De server en lokale ontwikkeling vereisen **Node 24**. Je hebt geen Node-installatie op de host nodig als je Docker gebruikt. Controleer het project vanuit de projectmap met:
+
+```sh
+sh check-project.sh
+```
+
+Het script gebruikt `node:24-alpine`, installeert de dependencies met `npm ci`, bouwt de game en voert de server- en databasetests uit. Buildbestanden en dependencies worden met jouw gebruikersrechten gemaakt. Hiervoor worden tijdelijke testdatabases gebruikt; je echte accounts en scores blijven behouden.
+
+Met een lokale Node 24-installatie kun je `npm ci`, `npm run dev`, `npm run build` en `node --test server/selfhost.test.js` uitvoeren. Node 18 ondersteunt de gebruikte ingebouwde SQLite-module niet. De lokale `/qa.html`-route voert de echte engine en browserassets door mechaniektests; deze route wordt niet in het websitepakket gebouwd.
+
+De Vite-ontwikkelpreview gebruikt een eigen gedeelde SQLite-testdatabase en test niet de Docker-login. De Docker-server gebruikt persoonlijke accounts in `./data/progress.sqlite`. De afzonderlijke privé gehoste Sites-versie gebruikt haar gateway en de door Sites beheerde D1; de Docker-beheerfuncties worden daar niet automatisch gepubliceerd.
 
 ## Bronnen
 

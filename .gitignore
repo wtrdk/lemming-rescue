@@ -4,3 +4,11 @@ dist/
 .env
 .wrangler/
 data/
+
+backups/
+
+data-backup-*/
+
+.env.*
+
+!.env.example

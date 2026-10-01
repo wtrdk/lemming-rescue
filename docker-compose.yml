@@ -9,11 +9,17 @@ services:
       HOST: 0.0.0.0
       DATA_DIR: /data
       STATIC_DIR: /app/public
-      LEMMING_RESCUE_PASSWORD: "${LEMMING_RESCUE_PASSWORD:?Stel LEMMING_RESCUE_PASSWORD in via .env (minimaal 12 tekens)}"
+      BACKUP_DIR: /backups
+      BACKUP_KEEP_DAYS: "${LEMMING_BACKUP_KEEP_DAYS:-14}"
+      BACKUP_HOUR: "${LEMMING_BACKUP_HOUR:-3}"
+      BACKUP_TIMEZONE: "${LEMMING_BACKUP_TIMEZONE:-Europe/Amsterdam}"
+      LEMMING_RESCUE_USERNAME: "${LEMMING_RESCUE_USERNAME:-wtrdk}"
+      LEMMING_RESCUE_PASSWORD: "${LEMMING_RESCUE_PASSWORD:-}"
     ports:
       - "${LEMMING_RESCUE_BIND:-127.0.0.1}:${LEMMING_RESCUE_PORT:-8080}:8080"
     volumes:
       - ./data:/data
+      - ./backups:/backups
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8080/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
       interval: 30s
