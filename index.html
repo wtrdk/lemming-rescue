@@ -13,7 +13,13 @@
     <span class="wordmark">Lemming Rescue</span>
     <label>Level <select id="levelChoice" aria-label="Level kiezen" disabled><option>Levels laden…</option></select></label>
     <span id="bestResult" class="best">Voortgang laden…</span>
+    <button id="tutorialOpen" type="button" aria-controls="tutorialPanel">Leren spelen</button>
+    <button id="campaignToggle" type="button" aria-controls="campaignMap" aria-expanded="false">Campagnekaart</button>
   </header>
+  <section id="campaignMap" class="campaign-map" hidden aria-labelledby="campaignTitle">
+    <div class="campaign-heading"><div><p class="campaign-eyebrow">AMIGA-CAMPAGNE</p><h2 id="campaignTitle">Kies je volgende level</h2><p id="campaignSummary">Voortgang laden…</p></div><button id="campaignClose" type="button" aria-label="Campagnekaart sluiten">Sluiten</button></div>
+    <div id="campaignGroups" class="campaign-groups"></div>
+  </section>
   <div class="stage" id="stage">
     <canvas id="gameCanvas" width="320" height="160" aria-label="Speelveld. Selecteer een skill en klik op een lemming. Sleep om het level te verschuiven; gebruik twee vingers om te zoomen." tabindex="0"></canvas>
     <section id="introOverlay" class="overlay" aria-labelledby="levelTitle">
@@ -26,6 +32,11 @@
     </section>
     <span id="pauseBadge" class="pause-badge" hidden>PAUZE</span>
   </div>
+  <section id="tutorialPanel" class="tutorial-panel" hidden aria-labelledby="tutorialTitle" aria-live="polite">
+    <div class="tutorial-progress"><span id="tutorialCounter">Les 1 van 7</span><progress id="tutorialProgress" max="7" value="1"></progress></div>
+    <div class="tutorial-copy"><h2 id="tutorialTitle">Graven</h2><p id="tutorialDescription"></p><p id="tutorialTask" class="tutorial-task"></p></div>
+    <div class="tutorial-actions"><button id="tutorialPrev" type="button">Vorige les</button><button id="tutorialStart" type="button" class="primary">Oefenlevel starten</button><button id="tutorialNext" type="button">Volgende les</button><button id="tutorialStop" type="button">Tutorial sluiten</button></div>
+  </section>
   <div class="classic-panel">
     <div class="statusbar" aria-label="Levelstatus">
       <span id="cursorReadout">Kies een lemming</span><span>OUT <strong id="statOut">0</strong></span><span>SAVE <strong id="statSaved">0%</strong></span><span>NEED <strong id="statNeed">10%</strong></span><span>TIME <strong id="statTime">05:00</strong></span>
@@ -45,7 +56,7 @@
   </div>
   <div class="practice-panel" id="practicePanel" hidden>
     <button id="rewind">5 sec terug</button><button id="step">Eén stap</button><label>Tijdlijn <input id="timeline" type="range" min="0" max="0" value="0" aria-label="Oefentijdlijn"></label><span id="practiceTime">00:00</span>
-    <span class="note">Oefenresultaten tellen niet mee voor je beste resultaat.</span>
+    <span class="note">Oefenresultaten tellen niet mee voor je beste resultaat.</span><a id="editorReturn" href="/editor.html" hidden>Terug naar levelbouwer</a>
   </div>
   <div class="messagebar"><span id="melding" role="status">Selecteer een level.</span><button id="retryProgress" hidden>Voortgang opnieuw laden</button></div>
   <details id="options"><summary>Geluid, replays &amp; bediening</summary>
@@ -56,7 +67,7 @@
     <p class="instructions"><kbd>1</kbd>–<kbd>8</kbd> skill · <kbd>Tab</kbd> volgende lemming · <kbd>Enter</kbd> toepassen · <kbd>Spatie</kbd> pauze · <kbd>−</kbd>/<kbd>+</kbd> instroom · pijltjes verschuiven · <kbd>R</kbd> herstart · <kbd>N</kbd> Nuke, tweemaal. Houd <kbd>Shift</kbd> vast om alleen walkers te kiezen. In oefenstand kun je tijdens pauze skills geven.</p>
     <p class="instructions">Op een touchscreen: tik een lemming, sleep het beeld of zoom met twee vingers. Climber en Floater blijven actief. Builder legt twaalf stenen; geef opnieuw Builder om door te bouwen. Staal is onverwoestbaar; pijlen bepalen de toegestane graafrichting.</p>
   </details>
-  <footer><a href="/rescue.html">Eigen Rescue-puzzel</a><a href="/versus.html">Amiga-tweespelerslevels</a><span>Amiga · 120 singleplayerlevels · DMA Design / Psygnosis · Sprite-rip: Megasis</span></footer>
+  <footer><a href="/editor.html">Levelbouwer</a><a href="/rescue.html">Eigen Rescue-puzzel</a><a href="/versus.html">Amiga-tweespelerslevels</a><span>Amiga · 120 singleplayerlevels · DMA Design / Psygnosis · Sprite-rip: Megasis</span></footer>
 </main>
 <script type="module" src="/classic.js"></script>
 </body></html>

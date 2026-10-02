@@ -10,7 +10,8 @@ const names=['Klimmer','Zwever','Bomber','Blokkeren','Bouwer','Basher','Mijnwerk
 const animation=['klimmen','parachute','ohno','blokkeren','bouwen','bashen','mijnen','graven'];
 const store={read(k,fallback){try{return localStorage.getItem(k)??fallback}catch{return fallback}},write(k,v){try{localStorage.setItem(k,v)}catch{}}};
 const assets=new ClassicAssets(),sprites=new NativeSprites();
-let engine=null,data=null,levelIndex=0,selectedSkill=-1,selectedId=null,hoverId=null,paused=true,speed=1,started=false,watching=false,practiceUsed=false;
+let engine=null,data=null,levelIndex=0,officialLevelCount=0,selectedSkill=-1,selectedId=null,hoverId=null,paused=true,speed=1,started=false,watching=false,practiceUsed=false;
+let tutorialActive=false,tutorialLessonIndex=0,tutorialAssigned=new Set();
 let cameraX=0,cameraY=0,zoom=1,lastTime=0,accumulator=0,frames=0,frameClock=0,lastNuke=0,latestReplay=null,progress={},pendingSave=null,saveBusy=false;
 let snapshots=[],lastSnapshot=-1,handlesEnd=false,importedReplay=null,pointers=new Map(),pinch=null,drag=null,edgeScroll=0;
 const audio=new GameAudio(message=>say(message));
@@ -35,7 +36,7 @@ function renderSkillButtons(){
 }
 function chooseSkill(index){
   if(!engine||watching||engine.finished||engine.skills[index]<=0)return;
-  selectedSkill=selectedSkill===index?-1:index;updateHud();
+  selectedSkill=selectedSkill===index?-1:index;updateHud();renderTutorialPanel();
   say(selectedSkill<0?'Skillkeuze opgeheven.':`${names[index]} geselecteerd; klik op een lemming.`);
 }
 function setPaused(value){paused=value;$('pauzeKnop').setAttribute('aria-pressed',String(value));$('pauzeKnop').textContent=value?'Verder':'Pauze';$('pauseBadge').hidden=!value;if(value)audio.pause();else if(audio.musicEnabled&&started)audio.playMusic();lastTime=0;accumulator=0;}
@@ -43,15 +44,16 @@ function setSpeed(value){speed=value;$('snelKnop').setAttribute('aria-pressed',S
 function levelTitle(d){return d.name.replace(/\s+/g,' ').trim();}
 function resetLevel(index=levelIndex){
   levelIndex=index;data=assets.levels[index];engine=new Engine(data,assets);engine.silent=false;cameraX=data.camera||0;cameraY=0;zoom=Number($('zoom').value)||1;
+  $('editorReturn').hidden=true;
   selectedSkill=-1;selectedId=null;hoverId=null;started=false;watching=false;importedReplay=null;practiceUsed=$('practice').checked;latestReplay=null;pendingSave=null;handlesEnd=false;lastNuke=0;
   $('introOverlay').hidden=false;$('eindOverlay').hidden=true;$('pauseBadge').hidden=true;$('practicePanel').hidden=!$('practice').checked;
   $('levelChoice').value=data.id;$('levelEyebrow').textContent=`${data.rating.toUpperCase()} ${String(data.number).padStart(2,'0')}`;$('levelTitle').textContent=levelTitle(data);
   $('levelGoal').textContent=`Breng minstens ${data.required} van de ${data.total} lemmings naar de uitgang (${goalPct(data)}%).`;
-  $('levelHint').textContent=levelHints[index]||'Bekijk de route en verdeel je skills zorgvuldig; klik op een lemming om een opdracht toe te wijzen.';$('startKnop').disabled=false;$('nextLevel').hidden=index===assets.levels.length-1;
+  $('levelHint').textContent=levelHints[index]||'Bekijk de route en verdeel je skills zorgvuldig; klik op een lemming om een opdracht toe te wijzen.';$('startKnop').disabled=false;$('nextLevel').hidden=index>=officialLevelCount-1;
   $('statNeed').textContent=goalPct(data)+'%';$('releaseRate').textContent=data.releaseRate;
   $('watchReplay').disabled=!progress[data.id]?.replay;$('exportReplay').disabled=true;$('replayStatus').textContent=progress[data.id]?.replay?'Beste resultaat en replay geladen.':'Je handelingen worden tijdens het spelen opgenomen.';
   $('bestResult').textContent=progress[data.id]?`Beste: ${progress[data.id].percent}%${progress[data.id].completed?' · gehaald':''}`:'Nog geen opgeslagen resultaat';
-  setPaused(true);setSpeed(1);snapshots=[];lastSnapshot=-1;addSnapshot();updateHud();audio.setLevel(index%5);draw();
+  setPaused(true);setSpeed(1);snapshots=[];lastSnapshot=-1;addSnapshot();updateHud();renderCampaignMap();renderTutorialPanel();audio.setLevel(index%5);draw();
 }
 const levelHints=[
   'Graaf een tunnel door de vloer zodat de groep naar de lagere uitgang kan vallen.',
@@ -60,12 +62,63 @@ const levelHints=[
   'Klimmers komen over wanden. Een mijnwerker kan een doorgang door de rots maken.',
   'Laat de groep met bashers door de muren breken.'
 ];
+const tutorialLessons=[
+  {levelId:'fun-1',title:'Graver',skills:[7],description:'Een graver maakt recht onder zich een tunnel. Zo kan de groep door de vloer naar de uitgang.',task:'Selecteer Graver en wijs die toe aan een lemming boven de zachte grond.'},
+  {levelId:'fun-2',title:'Zwever',skills:[1],description:'Een zwever opent een parachute en overleeft een lange val die anders fataal zou zijn.',task:'Selecteer Zwever en wijs die toe voordat de lemming valt.'},
+  {levelId:'fun-3',title:'Blokkeren',skills:[3],description:'Een blocker houdt lemmings tegen. De groep draait om en loopt de andere kant op.',task:'Maak een blocker bij de groep en kijk hoe de anderen omkeren.'},
+  {levelId:'fun-4',title:'Klimmer en mijnwerker',skills:[0,6],description:'Klimmers nemen verticale wanden. Mijnwerkers graven schuin door de rots.',task:'Probeer beide skills op een geschikte lemming; de muur en de helling laten zien wanneer ze werken.'},
+  {levelId:'fun-5',title:'Basher',skills:[5],description:'Een basher slaat horizontaal door zachte muren, zonder door staal heen te komen.',task:'Selecteer Basher en wijs die toe waar de route door de wand moet lopen.'},
+  {levelId:'fun-6',title:'Bomber',skills:[2,3],description:'Een bomber telt af en maakt een gat in breekbaar terrein. Een blocker kan intussen de groep sturen.',task:'Probeer Bomber en Blocker om de groep veilig langs het obstakel te leiden.'},
+  {levelId:'fun-7',title:'Bouwer',skills:[4],description:'Een bouwer legt een trap over een opening. Wijs Bouwer nogmaals toe om door te bouwen.',task:'Start een trap bij een rand en geef Bouwer opnieuw om verder te bouwen.'}
+];
+function renderTutorialPanel(){
+  if(!tutorialActive)return;const lesson=tutorialLessons[tutorialLessonIndex];if(!lesson)return;
+  const namesForLesson=lesson.skills.map(i=>names[i]);const complete=lesson.skills.every(i=>tutorialAssigned.has(i));
+  $('tutorialCounter').textContent=`Les ${tutorialLessonIndex+1} van ${tutorialLessons.length}`;
+  $('tutorialProgress').value=tutorialLessonIndex+1;$('tutorialTitle').textContent=lesson.title;$('tutorialDescription').textContent=lesson.description;
+  let prompt=lesson.task;
+  if(complete)prompt='Goed gedaan! De belangrijkste skill(s) zijn toegewezen. Speel het oefenlevel uit of ga door naar de volgende les.';
+  else if(started&&selectedSkill>=0&&lesson.skills.includes(selectedSkill)&&!tutorialAssigned.has(selectedSkill))prompt=`Goed gekozen: ${names[selectedSkill]}. Tik of klik nu op een geschikte lemming.`;
+  else if(started&&selectedSkill>=0&&!lesson.skills.includes(selectedSkill))prompt=`Kies voor deze les ${namesForLesson.join(' of ')}; andere skills bewaren we voor de volgende lessen.`;
+  else if(!started)prompt=`Start het level met de groene knop in beeld. Daarna: ${lesson.task}`;
+  $('tutorialTask').textContent=prompt;
+  $('tutorialPrev').disabled=tutorialLessonIndex===0;$('tutorialNext').disabled=tutorialLessonIndex===tutorialLessons.length-1;
+  $('tutorialNext').textContent=tutorialLessonIndex===tutorialLessons.length-1?'Laatste les':'Volgende les';
+  $('tutorialStart').textContent=data?.id===lesson.levelId?'Oefening opnieuw starten':'Open dit oefenlevel';
+}
+function startTutorialLesson(index=tutorialLessonIndex){
+  if(index<0||index>=tutorialLessons.length)return;tutorialLessonIndex=index;tutorialActive=true;tutorialAssigned=new Set();
+  const lesson=tutorialLessons[index],level=assets.levels.findIndex(d=>d.id===lesson.levelId);if(level<0)return;
+  $('practice').checked=true;$('tutorialPanel').hidden=false;$('campaignMap').hidden=true;$('campaignToggle').setAttribute('aria-expanded','false');
+  resetLevel(level);$('tutorialPanel').hidden=false;renderTutorialPanel();say(`Tutorial · les ${index+1}: ${lesson.title}. Start het level om te oefenen.`);
+}
+function closeTutorial(){tutorialActive=false;$('tutorialPanel').hidden=true;$('practice').checked=false;if(engine&&!started)practiceUsed=false;say('Tutorial gesloten. Je kunt verder spelen of de campagnekaart openen.');}
+function renderCampaignMap(){
+  const root=$('campaignGroups');if(!root||!assets.levels?.length)return;root.replaceChildren();
+  const ratings=['Fun','Tricky','Taxing','Mayhem'];let completed=0,played=0;
+  for(const rating of ratings){
+    const levels=assets.levels.filter(d=>d.rating===rating);const finished=levels.filter(d=>progress[d.id]?.completed).length;
+    const section=document.createElement('section');section.className='campaign-group';
+    const heading=document.createElement('div');heading.className='campaign-group-heading';const title=document.createElement('h3');title.textContent=rating;const count=document.createElement('span');count.textContent=`${finished} van ${levels.length} gehaald`;heading.append(title,count);
+    const grid=document.createElement('div');grid.className='campaign-levels';
+    for(const d of levels){const best=progress[d.id],button=document.createElement('button');button.type='button';button.className='campaign-level';button.dataset.level=d.id;
+      if(best?.completed){button.classList.add('completed');completed++;}if(best)played++;if(data?.id===d.id)button.classList.add('current');
+      const number=document.createElement('span');number.className='campaign-level-number';number.textContent=String(d.number).padStart(2,'0');
+      const name=document.createElement('span');name.className='campaign-level-name';name.textContent=d.name;
+      const state=document.createElement('span');state.className='campaign-level-state';state.textContent=best?`${best.completed?'✓ Gehaald · ':''}Beste ${best.percent}%`:'Nog niet gespeeld';
+      button.setAttribute('aria-label',`${rating} ${d.number}: ${d.name}. ${state.textContent}. Level openen.`);button.append(number,name,state);
+      button.addEventListener('click',()=>{tutorialActive=false;$('tutorialPanel').hidden=true;$('practice').checked=false;$('campaignMap').hidden=true;$('campaignToggle').setAttribute('aria-expanded','false');chooseLevel(d.id);});grid.append(button);
+    }
+    section.append(heading,grid);root.append(section);
+  }
+  $('campaignSummary').textContent=`${completed} van ${assets.levels.length} levels gehaald · ${played} levels gespeeld`;
+}
 function start(watch=null){
   if(watch){const replayIndex=assets.levels.findIndex(d=>d.id===watch.levelId);if(replayIndex<0)return;if(!engine||data.id!==watch.levelId||engine.tick||engine.finished)resetLevel(replayIndex);}
   if(!engine)return;started=true;$('introOverlay').hidden=true;$('eindOverlay').hidden=true;$('pauseBadge').hidden=false;
   if(watch){watching=true;importedReplay=watch;engine.replay=structuredClone(watch);engine.commands=[];latestReplay=watch;practiceUsed=true;$('practice').checked=true;$('practicePanel').hidden=false;say('Replay wordt afgespeeld; resultaten worden niet opgeslagen.');}
   else{watching=false;engine.replay=null;practiceUsed=$('practice').checked;say(practiceUsed?'Oefenstand actief; dit resultaat telt niet mee.':'Level gestart.');}
-  setPaused(false);if(audio.musicEnabled)audio.playMusic();canvas.focus({preventScroll:true});lastTime=0;accumulator=0;
+  setPaused(false);renderTutorialPanel();if(audio.musicEnabled)audio.playMusic();canvas.focus({preventScroll:true});lastTime=0;accumulator=0;
 }
 function updateHud(){
   if(!engine)return;
@@ -135,7 +188,7 @@ async function saveProgress(){if(!pendingSave||saveBusy)return;saveBusy=true;$('
 }
 async function loadProgress(showErrors=true){
   try{const r=await fetch('/api/progress',{cache:'no-store'});if(!r.ok)throw Error('Voortgang kon niet worden opgehaald.');const b=await r.json();progress=Object.fromEntries((b.progress||[]).map(p=>[p.level_id,p]));
-    $('retryProgress').hidden=true;
+    $('retryProgress').hidden=true;renderCampaignMap();
     const ratings=['Fun','Tricky','Taxing','Mayhem'];
     $('levelChoice').replaceChildren(...ratings.map(r=>{const group=document.createElement('optgroup');group.label=r;for(const d of assets.levels.filter(x=>x.rating===r)){const o=document.createElement('option');o.value=d.id;o.textContent=`${r} ${d.number} · ${d.name}${progress[d.id]?` · ${progress[d.id].percent}%`:''}`;group.append(o);}return group;}));
     $('levelChoice').disabled=false;if(data){$('levelChoice').value=data.id;$('bestResult').textContent=progress[data.id]?`Beste: ${progress[data.id].percent}%${progress[data.id].completed?' · gehaald':''}`:'Nog geen opgeslagen resultaat';$('watchReplay').disabled=!progress[data.id]?.replay;}return true;
@@ -150,7 +203,7 @@ function chooseEntity(worldX,worldY,shift=false){
 }
 function assignEntity(e){
   if(!e||selectedSkill<0||watching)return false;
-  const ok=engine.command({type:'skill',lemming:e.id,skill:selectedSkill});if(ok){selectedId=e.id;consumeEvents();updateHud();say(`${names[selectedSkill]} toegewezen aan lemming ${e.id}.`);return true;}
+  const ok=engine.command({type:'skill',lemming:e.id,skill:selectedSkill});if(ok){if(tutorialActive&&tutorialLessons[tutorialLessonIndex].skills.includes(selectedSkill))tutorialAssigned.add(selectedSkill);selectedId=e.id;consumeEvents();updateHud();renderTutorialPanel();say(`${names[selectedSkill]} toegewezen aan lemming ${e.id}.`);return true;}
   say('Deze lemming kan die skill nu niet krijgen.');return false;
 }
 function canvasPoint(clientX,clientY){const r=canvas.getBoundingClientRect();return {x:(clientX-r.left)/r.width*320,y:(clientY-r.top)/r.height*160};}
@@ -187,7 +240,14 @@ function keydown(e){if(document.activeElement!==canvas&&document.activeElement!=
   draw();updateHud();}
 document.addEventListener('keydown',keydown);
 $('startKnop').addEventListener('click',async()=>{await audio.unlock();start();});
-$('levelChoice').addEventListener('change',e=>chooseLevel(e.target.value));
+$('levelChoice').addEventListener('change',e=>{if(tutorialActive)closeTutorial();chooseLevel(e.target.value);});
+$('campaignToggle').addEventListener('click',()=>{const open=$('campaignMap').hidden;$('campaignMap').hidden=!open;$('campaignToggle').setAttribute('aria-expanded',String(open));if(open)renderCampaignMap();});
+$('campaignClose').addEventListener('click',()=>{$('campaignMap').hidden=true;$('campaignToggle').setAttribute('aria-expanded','false');$('campaignToggle').focus();});
+$('tutorialOpen').addEventListener('click',()=>{if(tutorialActive){$('tutorialPanel').hidden=!$('tutorialPanel').hidden;if(!$('tutorialPanel').hidden)renderTutorialPanel();}else startTutorialLesson(0);});
+$('tutorialStart').addEventListener('click',()=>startTutorialLesson(tutorialLessonIndex));
+$('tutorialPrev').addEventListener('click',()=>startTutorialLesson(tutorialLessonIndex-1));
+$('tutorialNext').addEventListener('click',()=>startTutorialLesson(tutorialLessonIndex+1));
+$('tutorialStop').addEventListener('click',closeTutorial);
 $('pauzeKnop').addEventListener('click',()=>{if(started&&!engine.finished)setPaused(!paused);});$('snelKnop').addEventListener('click',()=>setSpeed(speed===1?2:1));$('herstartKnop').addEventListener('click',restart);
 $('nukeKnop').addEventListener('click',useNuke);$('tempoMinKnop').addEventListener('click',()=>alterRate(-1));$('tempoPlusKnop').addEventListener('click',()=>alterRate(1));
 $('zoom').addEventListener('change',()=>{const old=zoom;zoom=Number($('zoom').value);const cx=cameraX+160/old,cy=cameraY+80/old;cameraX=clamp(cx-160/zoom,0,data.width-320/zoom);cameraY=clamp(cy-80/zoom,0,data.height-160/zoom);draw();});
@@ -204,7 +264,7 @@ function seek(target,branch=true){
 }
 $('rewind').addEventListener('click',()=>{if($('practice').checked&&engine)seek(engine.tick-Math.ceil(5/TICK));});$('step').addEventListener('click',()=>{if($('practice').checked&&engine&&started&&!watching){engine.silent=false;engine.step();consumeEvents();if(engine.finished)finish();draw();updateHud();}});
 $('timeline').addEventListener('change',e=>{if($('practice').checked)seek(Number(e.target.value));});$('timeline').addEventListener('input',e=>{$('practiceTime').textContent=timeString(Number(e.target.value)*TICK);});
-$('retrySave').addEventListener('click',saveProgress);$('retryProgress').addEventListener('click',()=>loadProgress(true));$('nextLevel').addEventListener('click',()=>resetLevel(Math.min(levelIndex+1,assets.levels.length-1)));$('retryLevel').addEventListener('click',restart);
+$('retrySave').addEventListener('click',saveProgress);$('retryProgress').addEventListener('click',()=>loadProgress(true));$('nextLevel').addEventListener('click',()=>resetLevel(Math.min(levelIndex+1,officialLevelCount-1)));$('retryLevel').addEventListener('click',restart);
 $('endReplay').addEventListener('click',()=>{if(latestReplay)start(latestReplay);});$('watchReplay').addEventListener('click',()=>{const replay=progress[data.id]?.replay||latestReplay;if(replay)start(replay);});
 function downloadReplay(){const replay=latestReplay||progress[data.id]?.replay;if(!replay)return;const blob=new Blob([JSON.stringify(replay,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`lemming-rescue-${replay.levelId}-replay.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);}
 $('exportReplay').addEventListener('click',downloadReplay);
@@ -216,7 +276,7 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden){audio.paus
 $('options').addEventListener('toggle',()=>{if($('options').open)audio.unlock();});
 async function boot(){
   loadPreference();say('Originele levels en graphics laden…');
-  try{await Promise.all([assets.ready,sprites.nativeReady]);renderSkillButtons();await loadProgress(true);resetLevel(0);$('levelChoice').disabled=false;say('Fun 1 staat klaar. Er zijn 120 Amiga-levels beschikbaar.');}
+  try{await Promise.all([assets.ready,sprites.nativeReady]);officialLevelCount=assets.levels.length;renderSkillButtons();await loadProgress(true);let custom=null;try{custom=JSON.parse(sessionStorage.getItem('lr-editor-playtest')||'null');sessionStorage.removeItem('lr-editor-playtest');}catch{sessionStorage.removeItem('lr-editor-playtest');}if(custom&&custom.id==='custom-playtest'&&Array.isArray(custom.terrain)&&Array.isArray(custom.objects)&&[320,640,960,1280].includes(custom.width)&&Number.isInteger(custom.style)&&custom.style>=0&&custom.style<assets.styles.length){assets.levels.push(custom);const option=document.createElement('option');option.value=custom.id;option.textContent=`Oefenlevel · ${custom.name}`;$('levelChoice').append(option);$('practice').checked=true;resetLevel(assets.levels.length-1);$('editorReturn').hidden=false;$('practicePanel').hidden=false;$('levelChoice').disabled=false;say('Eigen level geladen in oefenstand. Resultaten worden niet opgeslagen.');}else{resetLevel(0);$('levelChoice').disabled=false;say('Fun 1 staat klaar. Er zijn 120 Amiga-levels beschikbaar.');}}
   catch(e){say(`De game kon niet worden gestart: ${e.message}`,true);$('startKnop').disabled=true;}
   requestAnimationFrame(animate);
 }

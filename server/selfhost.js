@@ -51,6 +51,17 @@ if(columns.length&&!columns.some(c=>c.name==='user_id')){
   replay TEXT NOT NULL,updated_at TEXT NOT NULL,PRIMARY KEY(user_id,level_id)
 )`);
 const levels=JSON.parse(await readFile(path.join(root,'assets/classic/levels.json'),'utf8'));
+const atlases=JSON.parse(await readFile(path.join(root,'assets/classic/atlas.json'),'utf8'));
+sqlite.exec(`CREATE TABLE IF NOT EXISTS user_levels(
+  id TEXT PRIMARY KEY,owner_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,data TEXT NOT NULL,updated_at TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS level_shares(
+  level_id TEXT NOT NULL REFERENCES user_levels(id) ON DELETE CASCADE,
+  recipient_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,shared_at TEXT NOT NULL,
+  PRIMARY KEY(level_id,recipient_id)
+)`);
+sqlite.exec('CREATE INDEX IF NOT EXISTS user_levels_owner_updated ON user_levels(owner_id,updated_at); CREATE INDEX IF NOT EXISTS level_shares_recipient ON level_shares(recipient_id);');
 initChallenges(sqlite,levels);
 const backups=new Backups(sqlite,process.env.BACKUP_DIR||path.join(dataDir,'backups'),{days:Number(process.env.BACKUP_KEEP_DAYS||14),hour:Number(process.env.BACKUP_HOUR||3),timezone:process.env.BACKUP_TIMEZONE||'Europe/Amsterdam'});
 await backups.start();
@@ -113,7 +124,7 @@ const server=createServer(async(req,res)=>{
       const next=encodeURIComponent(url.pathname+url.search);res.writeHead(302,{'location':`/?next=${next}`,'cache-control':'no-store','referrer-policy':'no-referrer'});res.end();return;
     }
     if(url.pathname==='/login'){res.writeHead(303,{'location':'/','cache-control':'no-store'});res.end();return;}
-    if(await features(req,res,url,user,sqlite,backups,levels))return;
+    if(await features(req,res,url,user,sqlite,backups,levels,atlases))return;
     if(url.pathname==='/api/progress'){
       let body;
       if(!['GET','HEAD'].includes(req.method||'GET')){

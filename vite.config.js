@@ -17,4 +17,4 @@ const previewProgress={name:'game-progress-preview',configureServer(server){
     const response=await progressAPI(request,db);res.statusCode=response.status;for(const[k,v]of response.headers)res.setHeader(k,v);res.end(await response.text());
   });
 }};
-export default defineConfig({plugins:[previewProgress],server:{host:'0.0.0.0',allowedHosts:['terminal.local']},build:{outDir:'dist/client',rollupOptions:{input:{main:'index.html',rescue:'rescue.html',versus:'versus.html'}}}});
+export default defineConfig({plugins:[previewProgress],server:{host:'0.0.0.0',allowedHosts:['terminal.local']},build:{outDir:'dist/client',rollupOptions:{input:{main:'index.html',rescue:'rescue.html',versus:'versus.html',editor:'editor.html'}}}});

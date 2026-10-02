@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Levelbouwer · Lemming Rescue</title>
+<link rel="stylesheet" href="/classic.css"><link rel="stylesheet" href="/lemmings-theme.css"><link rel="stylesheet" href="/editor.css">
+</head>
+<body>
+<main class="game-shell editor-shell">
+  <header class="editor-heading"><a class="wordmark" href="/">← Lemming Rescue</a><div><p class="campaign-eyebrow">JOUW EIGEN AMIGA-LEVEL</p><h1>Levelbouwer</h1></div><button id="newLevel" type="button">Nieuw level</button></header>
+  <div class="editor-toolbar"><label>Mijn levels <select id="savedLevels"><option value="">Nieuw level</option></select></label><button id="loadLevel" type="button">Openen</button><button id="saveLevel" class="primary" type="button">Level opslaan</button><button id="deleteLevel" type="button">Verwijderen</button><button id="playtest" type="button">▶ Playtesten</button></div>
+  <div class="editor-layout">
+    <aside class="editor-sidebar">
+      <section class="editor-card"><h2>Levelinstellingen</h2>
+        <label>Naam <input id="levelName" maxlength="64" value="Mijn eerste level"></label>
+        <div class="editor-fields"><label>Breedte<select id="levelWidth"><option value="320">1 scherm</option><option value="640">2 schermen</option><option value="960" selected>3 schermen</option><option value="1280">4 schermen</option></select></label><label>Graphics<select id="levelStyle"></select></label></div>
+        <div class="editor-fields"><label>Lemmings<input id="levelTotal" type="number" min="1" max="100" value="10"></label><label>Reddingsdoel<input id="levelRequired" type="number" min="1" max="100" value="8"></label></div>
+        <div class="editor-fields"><label>Tijd (sec.)<input id="levelTime" type="number" min="30" max="3600" value="180"></label><label>Instroom<input id="levelRate" type="number" min="1" max="99" value="50"></label></div>
+      </section>
+      <section class="editor-card"><h2>Skills</h2><div id="skillFields" class="skill-fields"></div></section>
+      <section class="editor-card"><h2>Gereedschap</h2>
+        <div class="tool-buttons" role="group" aria-label="Gereedschap"><button data-tool="terrain" aria-pressed="true">Terrein</button><button data-tool="object" aria-pressed="false">Object</button><button data-tool="steel" aria-pressed="false">Staal</button><button data-tool="erase" aria-pressed="false">Wissen</button></div>
+        <div id="terrainPalette" class="tile-palette" aria-label="Terrein kiezen"></div>
+        <div id="objectPalette" class="object-palette" hidden aria-label="Object kiezen"></div>
+        <p class="editor-help">Tik of klik om te plaatsen. Sleep een onderdeel om het te verplaatsen. Rechtsklik wist het onderdeel. Staal teken je door te slepen.</p>
+      </section>
+    </aside>
+    <section class="editor-workarea"><div class="canvas-caption"><strong>Speelveld</strong><span id="canvasSize">960 × 160</span><label>Raster<select id="gridSize"><option>1</option><option>4</option><option selected>8</option><option>16</option></select> px</label></div>
+      <div class="editor-canvas-wrap"><canvas id="levelCanvas" width="960" height="160" aria-label="Bewerkbaar level canvas"></canvas></div>
+      <p id="editorStatus" role="status">Level laden…</p>
+      <section class="share-card"><div><h2>Privé delen</h2><p>Deel dit level alleen met een account op deze Lemming Rescue-site.</p></div><label>Gebruikersnaam <input id="shareUsername" maxlength="24" autocomplete="off"></label><div class="share-actions"><button id="shareLevel" type="button">Delen</button><button id="revokeShare" type="button">Delen intrekken</button></div><p id="shareStatus" role="status"></p></section>
+      <details class="file-tools"><summary>Levelbestand uitwisselen</summary><div><button id="exportLevel" type="button">Download JSON</button><label class="file-button">Importeer JSON<input id="importLevel" type="file" accept="application/json,.json"></label><span>JSON-bestanden kun je zelf privé versturen.</span></div></details>
+    </section>
+  </div>
+</main>
+<script type="module" src="/editor.js"></script>
+</body></html>

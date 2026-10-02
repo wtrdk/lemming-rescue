@@ -1,0 +1,19 @@
+Lemming Rescue — levelbouwer update
+
+Kopieer de inhoud van deze ZIP naar de hoofdmap van je bestaande Git-repository en laat bestaande bestanden overschrijven. Maak bij eigen lokale aanpassingen eerst een kopie of controleer `git diff`.
+
+Na uitpakken op de Docker-host:
+  cd /opt/lemmings
+  sh check-project.sh
+  docker compose up -d --build
+  docker compose logs --tail=50 lemming-rescue
+
+De server maakt de SQLite-tabellen voor eigen levels en deelrechten automatisch aan bij het starten. De bestaande database en voortgang blijven behouden. Levels en gedeelde toegang gaan mee in de dagelijkse databaseback-ups.
+
+Daarna kun je de update committen en naar je private GitHub-repository pushen:
+  git add README.md LEVELBOUWER.md LEVELBOUWER-UPDATE.txt classic.js editor.css editor.html editor.js index.html server/features.js server/selfhost.js server/selfhost.test.js vite.config.js
+  git diff --cached --check
+  git commit -m "Voeg privé levelbouwer toe"
+  git push github main
+
+De ZIP bevat alleen bestanden voor deze levelbouwerupdate. De site wordt hiermee niet gepubliceerd; Docker Compose bouwt en start alleen jouw eigen host.

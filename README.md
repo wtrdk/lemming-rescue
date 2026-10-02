@@ -17,6 +17,7 @@ De navigatie biedt:
 | Pagina | Functie | Toegang |
 | --- | --- | --- |
 | `/` | De 120 Amiga-singleplayerlevels | Alle aangemelde gebruikers |
+| `/editor.html` | Eigen levels bouwen, testen en privé delen | Alle aangemelde gebruikers |
 | `/versus.html` | 20 levels voor twee lokale spelers | Alle aangemelde gebruikers |
 | `/rescue.html` | De eigen Rescue-puzzel | Alle aangemelde gebruikers |
 | `/scoreboard` | Privé challenges per singleplayerlevel | Alle aangemelde gebruikers |
@@ -25,12 +26,13 @@ De navigatie biedt:
 
 Dagelijkse gecontroleerde back-ups worden standaard om 03:00 Nederlandse tijd gemaakt en 14 dagen bewaard. Het scorebord bewaart drie onafhankelijke records per speler en level: meeste lemmings gered, minste skills en snelste oplossing. Alleen gehaalde levels tellen mee.
 
-Begin met [DOCKER.md](DOCKER.md). Voor accountbeheer zie [MULTIUSER.md](MULTIUSER.md), voor back-ups en challenges [FEATURES.md](FEATURES.md) en voor repositorybeheer [GITHUB.md](GITHUB.md).
+Begin met [DOCKER.md](DOCKER.md). Voor accountbeheer zie [MULTIUSER.md](MULTIUSER.md), voor de levelbouwer [LEVELBOUWER.md](LEVELBOUWER.md), voor back-ups en challenges [FEATURES.md](FEATURES.md) en voor repositorybeheer [GITHUB.md](GITHUB.md).
 
 ## Wat erin zit
 
 - 120 Amiga-singleplayerlevels (Fun 1–30, Tricky 1–30, Taxing 1–30 en Mayhem 1–30), inclusief de originele levelherhalingen met afzonderlijke moeilijkheid, metadata en voortgang.
 - 20 aparte Amiga-tweepelerslevels met twee lokale teams, onafhankelijke skillvoorraden en de originele levelobjecten en terrein.
+- Een levelbouwer met oorspronkelijke terrein- en objectgraphics, skillinstellingen, staal, levels opslaan per account, playtesten en gericht delen met andere accounts.
 - Alle vijf oorspronkelijke Amiga-paletstijlen: terrein wordt als afzonderlijke pixelstukken gerenderd; ingangen, uitgangen, decoratie, vallen en vloeistoffen gebruiken hun eigen frames en triggers.
 - De aangeleverde personagesheet met pixelgeverifieerde uitsneden, framevolgordes en voetankers voor alle animaties. Vier beschadigde ripframes, de sprongen en de explosie zijn uit originele Amiga-data hersteld. `SPRITE-AUDIT.md` beschrijft de controle van alle 337 frames.
 - Een vaste Amiga-PAL-simulatiecadans van 50/3 stappen per seconde, integer-pixelbeweging, gevormde terreinbotsingen, framegestuurde skills, traps, staal en eenrichtings-terrein.
