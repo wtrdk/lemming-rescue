@@ -1,0 +1,367 @@
+/* Shared, responsive storybook/pixel theme for the Lemming Rescue games. */
+:root {
+  color-scheme: light;
+  --stone: #e8d4a6;
+  --stone-light: #fff0c7;
+  --stone-dark: #a98550;
+  --grass: #497b3f;
+  --grass-light: #91bd5b;
+  --sky: #66b8e5;
+  --sky-dark: #275f9b;
+  --ink: #24324a;
+  --gold: #ffd64c;
+  --red: #c94736;
+}
+
+body {
+  color: var(--ink);
+  background-color: #83c7e9;
+  background-image:
+    radial-gradient(ellipse at 14% 8%, #e6f5ff 0 4%, transparent 4.5%),
+    radial-gradient(ellipse at 20% 8%, #e6f5ff 0 5%, transparent 5.5%),
+    radial-gradient(ellipse at 82% 4%, #e6f5ff 0 4%, transparent 4.5%),
+    linear-gradient(#80c9ef 0 58%, #acd576 58% 64%, #719d50 64% 100%);
+  background-attachment: fixed;
+}
+
+.game-shell,
+.arena {
+  color: var(--ink);
+  background: var(--stone);
+  border: 6px solid var(--stone-dark);
+  border-radius: 3px;
+  box-shadow: 0 0 0 4px var(--grass), 0 12px 0 #315b37, 0 22px 38px #1a3b3b77;
+}
+
+.levelbar,
+.arena > header,
+.topbar {
+  color: var(--ink);
+  background: linear-gradient(#f5e5bd, #d9bd85);
+  border-color: var(--stone-dark);
+  box-shadow: inset 0 3px 0 #fff2d0, inset 0 -3px 0 #b28e58;
+}
+
+.wordmark,
+.best,
+.rate,
+.statusbar,
+.statusbar strong,
+.instructions,
+.note,
+.messagebar,
+.help,
+footer,
+footer a,
+summary,
+.options-grid h2 {
+  color: var(--ink);
+}
+
+.wordmark,
+.statusbar strong,
+.rate strong,
+.options-grid h2,
+summary {
+  color: #356a36;
+}
+
+button,
+select,
+.file-button,
+.arena button,
+.arena select {
+  color: #17365b;
+  background: linear-gradient(#a9ddf4, #66b6e6);
+  border: 3px solid;
+  border-color: #e7f6ff #31699b #31699b #e7f6ff;
+  border-radius: 3px;
+  box-shadow: 0 2px 0 #244e70;
+  font-weight: 800;
+  text-shadow: 0 1px #ffffff66;
+  transition: filter .12s ease, transform .12s ease, box-shadow .12s ease;
+}
+
+button:hover,
+select:hover,
+.file-button:hover {
+  filter: brightness(1.08) saturate(1.06);
+}
+
+button:active {
+  transform: translateY(2px);
+  border-color: #31699b #e7f6ff #e7f6ff #31699b;
+  box-shadow: 0 0 0 #244e70;
+}
+
+button:focus-visible,
+select:focus-visible,
+input:focus-visible,
+canvas:focus-visible,
+summary:focus-visible,
+a:focus-visible {
+  outline: 3px solid #ffcf36;
+  outline-offset: 3px;
+}
+
+button:disabled { filter: grayscale(.55); }
+
+.primary,
+#start,
+.veil button,
+.kaart .start {
+  color: #173e27;
+  background: linear-gradient(#c4ed83, #75bd4c);
+  border-color: #eaffbd #42753c #42753c #eaffbd;
+  box-shadow: 0 2px 0 #365b35;
+}
+
+.primary:hover,
+#start:hover,
+.veil button:hover,
+.kaart .start:hover { background: linear-gradient(#d5f79a, #8dcc5b); }
+
+.stage,
+.canvas-wrap {
+  background: #182b42;
+  border: 5px solid #bb9a63;
+  box-shadow: inset 0 0 0 3px #f1dfb5, 0 3px 0 #547942;
+}
+
+.classic-panel,
+.statusbar,
+.practice-panel,
+.controls,
+.messagebar,
+.underbar,
+.onderbalk {
+  color: var(--ink);
+  background: linear-gradient(#f2e1b8, #d8bd87);
+  border-color: #a98550;
+}
+
+.statusbar { text-shadow: 0 1px #fff5d9; }
+.statusbar #cursorReadout,
+.best,
+.messagebar,
+.messagebar .note,
+.practice-panel .note,
+.instructions { color: #30465d; }
+
+.skills button,
+.game-shell .skills button,
+.arena .skills button {
+  color: #24415b;
+  background: linear-gradient(#f6e7c2, #cfb27a);
+  border-color: #fff1ce #937447 #937447 #fff1ce;
+  box-shadow: 0 2px 0 #806544, inset 0 0 0 2px #b9915c;
+  text-shadow: none;
+}
+
+.skills button:hover { filter: brightness(1.05); }
+
+.skills button[aria-pressed="true"],
+.arena .skills button[aria-pressed="true"],
+.turns button.active {
+  color: #1d3c25;
+  background: linear-gradient(#fff2a0, #f0b936);
+  border-color: #fffbd0 #ae6e1c #ae6e1c #fffbd0;
+  box-shadow: 0 0 0 2px #fff1a3, 0 2px 0 #8b571c;
+  outline: 0;
+}
+
+.skill-count,
+.skill-name,
+.skill-key,
+.skill-picture + span,
+.skills b,
+.skills span { color: #294e32; }
+.skill-count { color: #183751; }
+
+.navigation-panel canvas {
+  border: 3px solid #b38b52;
+  box-shadow: inset 0 0 0 2px #f5e4bc;
+}
+
+.controls,
+.arena nav,
+.topbar .controls { border-color: #a98550; }
+
+#pauzeKnop,
+#pause { background: linear-gradient(#9fe1f2, #55a9db); }
+#snelKnop,
+#zoom { background: linear-gradient(#fff098, #edb931); }
+#herstartKnop,
+#restart { background: linear-gradient(#b8dcff, #6398d4); }
+#nukeKnop { color: #fff9dc; background: linear-gradient(#ed8771, #c63c36); border-color: #ffd3a3 #812a2c #812a2c #ffd3a3; text-shadow: 0 1px #682522; }
+#pauzeKnop[aria-pressed="true"],
+#snelKnop[aria-pressed="true"],
+#pause[aria-pressed="true"] { outline: 2px solid var(--gold); outline-offset: 1px; }
+
+.rate button {
+  min-width: 44px;
+  padding: 2px 12px;
+  background: linear-gradient(#c4ed83, #75bd4c);
+  border-color: #eaffbd #42753c #42753c #eaffbd;
+}
+
+.pause-badge {
+  color: #4a3415;
+  background: #ffe06a;
+  border: 2px solid #fff3aa;
+  box-shadow: 0 2px 0 #8e651e;
+}
+
+.overlay,
+.veil {
+  background: #142747aa;
+}
+
+.card,
+.veil > div,
+.kaart {
+  color: var(--ink);
+  background: linear-gradient(#fff0c8, #dec28d);
+  border: 4px solid #9b7747;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 3px #f8eac9, 0 5px 0 #385f3c, 0 12px 25px #10233c88;
+}
+
+.card h1,
+.card h2,
+.kaart h1,
+.kaart h2 { color: #356a36; }
+.card p,
+.card .hint,
+.veil span,
+.kaart p,
+.kaart ul,
+.klein { color: #34485d; }
+.card .eyebrow,
+.veil p { color: #8a5d27; }
+
+.messagebar { border-top: 2px solid #b18d58; }
+.game-shell details { color: #34485d; border-color: #b18d58; }
+.game-shell summary { text-shadow: 0 1px #fff5d9; }
+kbd {
+  color: #234a31;
+  background: #f9eccb;
+  border: 2px solid #ae8a54;
+  border-bottom-width: 3px;
+  border-radius: 2px;
+}
+
+footer {
+  background: linear-gradient(#dfc792, #c7a66e);
+  border-top: 2px solid #987345;
+}
+footer a,
+.arena > header a { color: #174e8a; font-weight: 800; }
+
+/* Versus and the custom rescue puzzle use the same framed pixel cabinet. */
+.arena > header h1 { color: #356a36; }
+.arena .score div,
+.arena .score div:nth-child(2) {
+  color: #26445b;
+  background: linear-gradient(#d9efb6, #a8cf7b);
+  border: 3px solid #6d984e;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 2px #eef6d2;
+}
+.arena .score div:nth-child(2) {
+  background: linear-gradient(#d5ecff, #98c8ea);
+  border-color: #5b8db1;
+}
+.arena .score small { color: #38536b; }
+.arena .turns button:first-child { background: linear-gradient(#c4ed83, #75bd4c); }
+.arena .turns button:nth-child(2) { background: linear-gradient(#a9ddf4, #66b6e6); }
+.arena .veil p { letter-spacing: .12em; }
+.arena .help,
+.arena nav span { color: #2b4660; }
+
+.game-shell .topbar { background: linear-gradient(#f5e5bd, #d9bd85); }
+.game-shell .statusvak {
+  background: #f2e3bc;
+  border: 2px solid #b18d58;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #fff4d5;
+}
+.game-shell .statusvak span { color: #526246; }
+.game-shell .statusvak strong { color: #244a31; }
+.game-shell .kaart .klein { color: #526178; }
+
+@media (max-width: 700px) {
+  .game-shell,
+  .arena { border-width: 4px; box-shadow: 0 0 0 2px var(--grass), 0 8px 0 #315b37; }
+  .levelbar { padding: 8px; }
+  .skills button { box-shadow: inset 0 0 0 1px #b9915c; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: .01ms !important; }
+}
+
+/* Small authentic Amiga details that make the frame feel like a game cabinet. */
+.game-shell { max-width: 1100px; }
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.wordmark::before,
+.arena > header h1::before {
+  content: "";
+  display: inline-block;
+  flex: 0 0 48px;
+  width: 48px;
+  height: 30px;
+  vertical-align: middle;
+  background: url("/assets/ui/lemming-walk.png") 0 0 / 384px 30px no-repeat;
+  image-rendering: pixelated;
+  animation: little-lemming-walk .72s steps(8, end) infinite;
+}
+.levelbar::after {
+  content: "";
+  display: block;
+  flex: 0 0 112px;
+  height: 56px;
+  margin-left: auto;
+  border: 4px solid #a98550;
+  outline: 2px solid #f8eccd;
+  background: #000033 url("/assets/login-level.png") center / 112px 56px no-repeat;
+  image-rendering: pixelated;
+  box-shadow: 0 2px 0 #537741;
+}
+.stage {
+  border: 10px solid transparent;
+  border-image-source: url("/assets/ui/stone-grass-frame.svg");
+  border-image-slice: 16 fill;
+  border-image-width: 10px;
+  border-image-repeat: round;
+  box-shadow: 0 3px 0 #547942;
+}
+.arena > header h1 {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+@keyframes little-lemming-walk {
+  from { background-position: 0 0; }
+  to { background-position: -384px 0; }
+}
+@media (max-width: 700px) {
+  .game-shell { width: 100%; max-width: none; }
+  .levelbar::after { display: none; }
+  .wordmark::before { flex-basis: 40px; width: 40px; height: 25px; background-size: 320px 25px; }
+  @keyframes little-lemming-walk {
+    from { background-position: 0 0; }
+    to { background-position: -320px 0; }
+  }
+}
+@media (pointer: coarse) and (min-width: 800px) and (orientation: landscape) {
+  .game-shell { max-width: 1440px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wordmark::before,
+  .arena > header h1::before { animation: none; background-position: 0 0; }
+}

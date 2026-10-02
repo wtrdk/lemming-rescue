@@ -1,0 +1,12 @@
+Lemming Rescue — mobiele layout en loginanimatie
+
+Plaats classic.css en versus.css in de hoofdmap van je project.
+Plaats de bestanden uit de map server/ in de map server/ van je project.
+server/login-page.js is nieuw; voeg dit bestand toe.
+
+Daarna vanuit de projectmap:
+git add classic.css versus.css server/selfhost.js server/login-page.js server/selfhost.test.js
+git diff --cached --check
+git commit -m "Gebruik originele lemmingsprites op loginpagina"
+git push github main
+docker compose up -d --build

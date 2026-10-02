@@ -1,0 +1,18 @@
+Lemming Rescue — update loginpagina met originele Amiga-graphics
+
+Pak alle bestanden uit in de hoofdmap van je bestaande Git-repository en behoud de mappenstructuur. De mapstructuur public/assets en scripts is nodig.
+
+Dit pakket bevat:
+- bijgewerkte CSS voor de mobiele layout
+- bijgewerkte loginpagina en serverintegratie
+- bijgewerkte selfhost-tests
+- public/assets/login-level.png (levelachtergrond voor de loginpagina)
+- scripts/create-login-preview.py (generator voor de levelafbeelding)
+
+Na uitpakken in de repository:
+  ls -l public/assets/login-level.png scripts/create-login-preview.py
+  npm run build
+  node --test server/selfhost.test.js
+  git status --short
+
+Voeg de wijzigingen pas aan Git toe nadat de controles zijn geslaagd.

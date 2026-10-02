@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" shape-rendering="crispEdges">
+  <!-- Repeating pixel-art frame: grass at the top, rocky earth around the sides. -->
+  <path fill="#795234" d="M0 0h48v48H0z"/>
+  <path fill="#9c7045" d="M0 0h16v16H0zM32 0h16v16H32zM0 32h16v16H0zM32 32h16v16H32z"/>
+  <path fill="#a97a4b" d="M16 4h16v12H16zM16 32h16v12H16zM4 16h12v16H4zM32 16h12v16H32z"/>
+  <path fill="#65462f" d="M0 12h16v4H0zM32 12h16v4H32zM0 32h16v4H0zM32 32h16v4H32zM12 0h4v16h-4zM32 0h4v16h-4zM12 32h4v16h-4zM32 32h4v16h-4z"/>
+  <path fill="#c18b54" d="M3 4h5v3H3zM9 8h4v3H9zM36 3h5v3h-5zM34 8h4v3h-4zM3 37h5v3H3zM8 42h4v3H8zM38 37h5v3h-5zM34 42h4v3h-4z"/>
+  <path fill="#497b3f" d="M0 0h48v4H0zM0 4h3v3H0zM8 4h4v2H8zM17 2h5v2h-5zM27 4h5v2h-5zM36 2h4v2h-4zM45 4h3v3h-3z"/>
+  <path fill="#91bd5b" d="M0 0h8v2H0zM12 2h5v2h-5zM22 0h5v2h-5zM32 2h4v2h-4zM40 0h8v2h-8zM4 6h3v2H4zM28 6h3v2h-3zM42 6h3v2h-3z"/>
+  <path fill="#d8bd87" d="M5 18h5v3H5zM12 24h3v4h-3zM35 18h5v3h-5zM33 27h4v3h-4zM18 37h5v3h-5zM25 42h4v3h-4z"/>
+</svg>
