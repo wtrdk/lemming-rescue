@@ -21,7 +21,8 @@ export class Backups{
     const day=this.day(now),tag=manual?'-'+now.toISOString().slice(11,19).replaceAll(':','')+'-'+randomBytes(3).toString('hex'):'';
     const name='lemming-'+day.date+tag+'.sqlite',file=this.file(name),temp=file+'.partial';
     const rows=await this.list();if(!manual&&rows.some(r=>r.name===name))return name;
-    try{await backup(this.sqlite,temp);await chmod(temp,0o600);const check=new DatabaseSync(temp,{readOnly:true});try{if(check.prepare('PRAGMA quick_check').get().quick_check!=='ok')throw new Error('De backupcontrole faalde.');}finally{check.close();}await rename(temp,file);}catch(e){await unlink(temp).catch(()=>{});throw e;}
+    const removeSidecars=async()=>{for(const suffix of ['-wal','-shm'])try{await unlink(temp+suffix);}catch(error){if(error.code!=='ENOENT')throw error;}};
+    try{await backup(this.sqlite,temp);await chmod(temp,0o600);const check=new DatabaseSync(temp,{readOnly:true});try{if(check.prepare('PRAGMA quick_check').get().quick_check!=='ok')throw new Error('De backupcontrole faalde.');}finally{check.close();}await removeSidecars();await rename(temp,file);}catch(e){await unlink(temp).catch(()=>{});await removeSidecars().catch(()=>{});throw e;}
     const cutoff=now.getTime()-this.days*86400000;
     for(const row of rows)if(new Date(row.createdAt).getTime()<cutoff)await unlink(this.file(row.name));
     console.log('Back-up gemaakt: '+name);return name;
